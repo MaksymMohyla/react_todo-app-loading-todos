@@ -9,7 +9,7 @@ import { Todo } from './types/Todo';
 type Filter = 'All' | 'Active' | 'Completed';
 
 export const App: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[] | []>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [selectedTodo] = useState<Todo | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<Filter>('All');
   const [query, setQuery] = useState('');
@@ -38,13 +38,13 @@ export const App: React.FC = () => {
 
     switch (selectedFilter) {
       case 'All':
-        visibleTodos = [...todos];
+        visibleTodos = todos;
         break;
       case 'Active':
-        visibleTodos = [...todos].filter(todo => !todo.completed);
+        visibleTodos = todos.filter(todo => !todo.completed);
         break;
       case 'Completed':
-        visibleTodos = [...todos].filter(todo => todo.completed);
+        visibleTodos = todos.filter(todo => todo.completed);
         break;
     }
 
@@ -77,7 +77,7 @@ export const App: React.FC = () => {
       <div className="todoapp__content">
         <header className="todoapp__header">
           {/* this button should have `active` class only if all todos are completed */}
-          {todos && (
+          {todos.length && (
             <button
               type="button"
               className={cn('todoapp__toggle-all', {
@@ -100,7 +100,7 @@ export const App: React.FC = () => {
           </form>
         </header>
 
-        {todos && (
+        {todos.length && (
           <section className="todoapp__main" data-cy="TodoList">
             {getVisibleTodos().map(todo => (
               <div
@@ -161,7 +161,7 @@ export const App: React.FC = () => {
         )}
 
         {/* Hide the footer if there are no todos */}
-        {todos && (
+        {todos.length && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
               {todos.filter(todo => !todo.completed).length} items left
